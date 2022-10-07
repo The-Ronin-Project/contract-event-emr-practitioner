@@ -1,0 +1,91 @@
+{
+  "create": {
+    "id": "h387afy7-78273478",
+    "fhirId": "78273478",
+    "tenantId": "h387afy7",
+    "resourceVersion": "123456",
+    "identifier": [
+      {
+        "use": "usual",
+        "type": {
+            "text": "NPI"
+        },
+        "system": "http://hl7.org/fhir/sid/us-npi",
+        "value": "9941339108"
+      },
+      {
+        "system": "http://www.psj.org/practitioners",
+        "value": "25456"
+      }
+    ],
+    "active": true,
+    "name" : [
+      {
+        "family": "De Rollo",
+        "given": [
+          "Percival", 
+          "Fredrickstein",
+          "von Musel",
+          "Klowolski"
+        ],
+        "prefix": ["Dr"],
+        "suffix": ["III"]
+      }
+    ],
+    "telecom": [
+      {
+        "system": "e-mail",
+        "roninSystem": "email",
+        "value": "practitioner@providence.com"
+      }
+    ],
+    "address": [
+      {
+        "use": "home",
+        "line": [
+          "1003 Slickrock Drive"
+        ],
+        "city": "Moab",
+        "state": "UT",
+        "postalCode": "84532"
+      }
+    ],
+    "gender": "",
+    "birthDate": "1976-07-04",
+    "photo": [
+      
+    ],
+    "qualification": [
+      {
+        "code": {
+          "emrText": "MD",
+          "coding": [
+            {
+              "code": "11",
+              "system": "urn:oid:1.2.840.114350.1.13.297.3.7.4.836982.6000",
+              "display": "MD"
+            }
+          ],
+          "text": "MD"
+        }
+      }    
+    ],
+    "communication": [
+      {
+        "language": {
+          "emrText": "English",
+          "coding": [
+            {
+              "system": "urn:ietf:bcp:47",
+              "code": "en",
+              "display": "English"
+            }
+          ]
+        },
+        "preferred": true
+      } 
+    ],
+    "createdAt": "2022-09-29T16:18:55Z",
+    "updatedAt": "2022-09-29T16:18:55Z"
+  }
+}
