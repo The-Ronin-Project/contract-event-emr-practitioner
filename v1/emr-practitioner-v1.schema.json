@@ -58,7 +58,7 @@
     },
     "codeableConcept": {
       "type":"object",
-      "description": "This is a CodeableConcept with an extracted emrText attribute that dictates the correct value to repsent in an EMR context.",
+      "description": "This is a CodeableConcept with an extracted emrText attribute that dictates the correct value to represent in an EMR context.",
       "properties": {
         "emrText": {
           "type": "string"
@@ -76,40 +76,30 @@
         }
       }
     },
-    "roninValueCode": {
-      "type": "object",
-      "properties": {
-        "emrText": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string",
-          "format": "uri"
-        },
-        "valueCode": {
-          "type": "string"
-        }
-      }
-    },
-    "datePeriod": {
+    "period": {
       "type": "object",
       "properties": {
         "start": {
-          "type": "string",
-          "format": "date"
+          "type": "string"
         },
         "end": {
-          "type": "string",
-          "format": "date"
+          "type": "string"
         }
-      },
-      "required": ["start", "end"]
+      }
     },
     "address": {
       "type": "object",
       "properties": {
         "use": {
           "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "distinguishes between postal and residence or both"
+        },
+        "text": {
+          "type": "string",
+          "description": "display string of the address"
         },
         "line": {
           "type": "array",
@@ -133,7 +123,8 @@
           "type": "string"
         },
         "period": {
-          "$ref": "#/$defs/datePeriod"
+          "$ref": "#/$defs/period",
+          "description": "Dates when the address was in use. Expected to be a date or a partial date"
         }
       }
     },
@@ -151,6 +142,15 @@
         "use": {
           "type": "string",
           "description": "The original use definition in the EMR"
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The preferred order of use"
+        },
+        "period": {
+          "$ref": "#/$defs/period",
+          "description": "Time period when the contact was in use."
         }
       },
       "required": ["value"]
@@ -160,11 +160,11 @@
       "properties": {
         "system": {
           "type": "string",
-          "description": "The original system defined by the EMR"
+          "description": "Normalized system"
         },
-        "roninSystem": {
-          "type": "string",
-          "description": "Ronin's normalized system"
+        "originalSystem": {
+          "$ref": "#/$defs/coding",
+          "description": "Original system value from the EMR"
         },
         "value": {
           "type": "string",
@@ -172,11 +172,20 @@
         },
         "use": {
           "type": "string",
-          "description": "The original use definition in the EMR"
+          "description": "Normalized use"
         },
-        "roninUse": {
-          "type": "string",
-          "description": "Ronin's normalized system"
+        "originalUse": {
+          "$ref": "#/$defs/coding",
+          "description": "Original use value from the EMR"
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The preferred order of use"
+        },
+        "period": {
+          "$ref": "#/$defs/period",
+          "description": "Time period when the contact was in use."
         }
       },
       "required": ["value"]
@@ -296,7 +305,8 @@
           "$ref": "#/$defs/resourceReference"
         },
         "period": {
-          "$ref": "#/$defs/datePeriod"
+          "$ref": "#/$defs/period",
+          "description": "Dates when the contact was in use. Expected to be a date or a parital date"          
         }
       }
     },
@@ -337,40 +347,31 @@
           }
         },
         "period": {
-          "$ref": "#/$defs/datePeriod",
-          "description": "Time period when the name was in use"
+          "$ref": "#/$defs/period",
+          "description": "Time period when the name was in use. Expected to be a date or partial date"
         }
-      },
-      "required": ["family", "given"]
+      }
     },
     "qualification": {
       "type": "object",
       "properties": {
         "identifier": {
-          "$ref": "#/$defs/identifier"
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
         },
         "code": {
           "$ref": "#/$defs/codeableConcept"
         },
         "period": {
-          "$ref": "#/$defs/datePeriod"
+          "$ref": "#/$defs/period"
         },
         "issuer": {
           "$ref": "#/$defs/resourceReference"
         }
-      }
-    },
-    "communication": {
-      "type": "object",
-      "properties": {
-        "language": {
-          "$ref": "#/$defs/codeableConcept"
-        },
-        "preferred": {
-          "type": "boolean"
-        }
       },
-      "required": ["language"]
+      "required": ["code"]
     },
     "practitioner": {
       "type": "object",
@@ -379,6 +380,10 @@
         "id": {
           "type": "string",
           "description": "Resource ID"
+        },
+        "fhirId": {
+          "type": "string",
+          "description": "FHIR ID"
         },
         "tenantId": {
           "type": "string",
@@ -439,7 +444,7 @@
         "communication": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/communication"
+            "$ref": "#/$defs/codeableConcept"
           }
         },
         "createdAt": {
