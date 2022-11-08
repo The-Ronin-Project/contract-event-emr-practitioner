@@ -63,10 +63,6 @@
         "emrText": {
           "type": "string"
         },
-        "url": {
-          "type": "string",
-          "format": "uri"
-        },
         "coding": {
           "type": "array",
           "items": {
@@ -277,39 +273,6 @@
         }
       }
     },
-    "contact": {
-      "type": "object",
-      "properties": {
-        "relationship": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/codeableConcept"
-          }
-        },
-        "name": {
-          "$ref": "#/$defs/humanName"
-        },
-        "telecom": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/contactPoint"
-          }
-        },
-        "address": {
-          "$ref": "#/$defs/address"
-        },
-        "gender": {
-          "type": "string"
-        },
-        "organization": {
-          "$ref": "#/$defs/resourceReference"
-        },
-        "period": {
-          "$ref": "#/$defs/period",
-          "description": "Dates when the contact was in use. Expected to be a date or a parital date"          
-        }
-      }
-    },
     "humanName": {
       "type": "object",
       "properties": {
@@ -357,18 +320,22 @@
       "properties": {
         "identifier": {
           "type": "array",
+          "description": "An identifier for this qualification for the practitioner",
           "items": {
             "$ref": "#/$defs/identifier"
           }
         },
         "code": {
-          "$ref": "#/$defs/codeableConcept"
+          "$ref": "#/$defs/codeableConcept",
+          "description": "Coded representation of the qualification"
         },
         "period": {
-          "$ref": "#/$defs/period"
+          "$ref": "#/$defs/period",
+          "description": "Period during which the qualification is valid"
         },
         "issuer": {
-          "$ref": "#/$defs/resourceReference"
+          "$ref": "#/$defs/resourceReference",
+          "description": "Organization that regulates and issues the qualification"
         }
       },
       "required": ["code"]
@@ -412,37 +379,43 @@
         },
         "telecom": {
           "type": "array",
+          "description": "A contact detail for the practitioner (that apply to all roles)",
           "items": {
             "$ref": "#/$defs/roninContactPoint"
           }
         },
         "address": {
           "type": "array",
+          "description": "Address(es) of the practitioner that are not role specific (typically home address)",
           "items": {
             "$ref": "#/$defs/address"
           }
         },
         "gender": {
-          "type": "string"
+          "type": "string",
+          "description": "The gender of the Practitioner"
         },
         "birthDate": {
           "type": "string",
-          "format": "date"
+          "description": "The date on which the practitioner was born. This is a FHIR date so it may not be a full birthdate"
         },
         "photo": {
           "type": "array",
+          "description": "Image of the person",
           "items": {
             "$ref": "#/$defs/attachment"
           }
         },
         "qualification": {
           "type": "array",
+          "description": "Certification, licenses, or training pertaining to the provision of care",
           "items": {
             "$ref": "#/$defs/qualification"
           }
         },
         "communication": {
           "type": "array",
+          "description": "A language the practitioner can use in patient communication",
           "items": {
             "$ref": "#/$defs/codeableConcept"
           }

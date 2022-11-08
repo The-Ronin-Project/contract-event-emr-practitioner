@@ -35,8 +35,11 @@
     ],
     "telecom": [
       {
-        "system": "e-mail",
-        "roninSystem": "email",
+        "system": "email",
+        "originalSystem": {
+          "code": "e-mail",
+          "system": "http://telecomSystem/localCodeSystem"
+        },
         "value": "practitioner@providence.com"
       }
     ],
@@ -51,10 +54,9 @@
         "postalCode": "84532"
       }
     ],
-    "gender": "",
+    "gender": "male",
     "birthDate": "1976-07-04",
     "photo": [
-      
     ],
     "qualification": [
       {
