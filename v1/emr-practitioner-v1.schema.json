@@ -1,0 +1,445 @@
+{
+  "$id": "https://github.com/projectronin/contract-event-emr-practitioner/v1/conract-event-emr-practitioner-v1.schema.json",
+  "title": "EMR Practitioner",
+  "description": "This is a Practitioner from the EMR",
+  "type": "object",
+  "properties": {
+    "create" : {
+      "description": "A Practitioner was created",
+      "$ref": "#/$defs/practitioner"
+    },
+    "update": {
+      "description": "An existing Practitioner was updated",
+      "$ref": "#/$defs/practitioner"
+    },
+    "delete": {
+      "type": "object",
+      "description": "An existing Practitioner was deleted",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The primary identifier of the Practitioner"
+        },
+        "tenantId": {
+          "type": "string",
+          "description": "Tenant ID"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time when the Practitioner was deleted"
+        }
+      },
+      "required": ["id", "tenantId", "deletedAt"]
+    }
+  },
+  "$defs":  {
+   "coding": {
+      "type": "object",
+      "description": "This defines the required attributed for a FHIR code",
+      "properties": {
+        "system": {
+          "description": "The coding system that defines what the code represents",
+          "type": "string"
+        },
+        "code": {
+          "description": "The specific code determined by the system that specifies the value.",
+          "type": "string"
+        },
+        "display": {
+          "description": "The human readable value for the code",
+          "type": "string"
+        },
+        "version": {
+          "description": "The specific version of the system where the code is defined",
+          "type": "string"
+        }
+      }
+    },
+    "codeableConcept": {
+      "type":"object",
+      "description": "This is a CodeableConcept with an extracted emrText attribute that dictates the correct value to represent in an EMR context.",
+      "properties": {
+        "emrText": {
+          "type": "string"
+        },
+        "coding": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/coding"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "period": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "string"
+        },
+        "end": {
+          "type": "string"
+        }
+      }
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "use": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "distinguishes between postal and residence or both"
+        },
+        "text": {
+          "type": "string",
+          "description": "display string of the address"
+        },
+        "line": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "city": {
+          "type": "string"
+        },
+        "district": {
+          "type": "string"
+        },
+        "state": {
+          "type":"string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "period": {
+          "$ref": "#/$defs/period",
+          "description": "Dates when the address was in use. Expected to be a date or a partial date"
+        }
+      }
+    },
+    "contactPoint": {
+      "type": "object",
+      "properties": {
+        "system": {
+          "type": "string",
+          "description": "The original system defined by the EMR"
+        },
+        "value": {
+          "type": "string",
+          "description": "The actual phone number or email address"
+        },
+        "use": {
+          "type": "string",
+          "description": "The original use definition in the EMR"
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The preferred order of use"
+        },
+        "period": {
+          "$ref": "#/$defs/period",
+          "description": "Time period when the contact was in use."
+        }
+      },
+      "required": ["value"]
+    },
+    "roninContactPoint": {
+      "type": "object",
+      "properties": {
+        "system": {
+          "type": "string",
+          "description": "Normalized system"
+        },
+        "originalSystem": {
+          "$ref": "#/$defs/coding",
+          "description": "Original system value from the EMR"
+        },
+        "value": {
+          "type": "string",
+          "description": "The actual phone number or email address"
+        },
+        "use": {
+          "type": "string",
+          "description": "Normalized use"
+        },
+        "originalUse": {
+          "$ref": "#/$defs/coding",
+          "description": "Original use value from the EMR"
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The preferred order of use"
+        },
+        "period": {
+          "$ref": "#/$defs/period",
+          "description": "Time period when the contact was in use."
+        }
+      },
+      "required": ["value"]
+    },
+    "identifier": {
+      "type": "object",
+      "properties": {
+        "use": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/codeableConcept"
+        },
+        "system": {
+          "type": "string",
+          "format": "uri"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "attachment": {
+      "type": "object",
+      "properties": {
+        "contentType": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "hash": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "creation": {
+          "type": "string"
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "width": {
+          "type": "integer"
+        }
+      }
+    },
+    "resourceReference": {
+      "type": "object",
+      "properties": {
+        "resource": {
+          "type": "object",
+          "description": "When this exists, it represents a reference to an actual resource. This is derived from the data specified in `reference`.",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "This is the ronin resource type"
+            },
+            "id": {
+              "type": "string",
+              "description": "This is the ronin ID for the resource"
+            }
+          }
+        },
+        "type": {
+          "type": "string",
+          "description": "The FHIR type attribute of the resource"
+        },
+        "reference": {
+          "type": "string",
+          "format": "uri-template",
+          "description": "This should refer to a `resource.type/resource.id` but could refer to an external resource"
+        },
+        "identifier": {
+          "$ref": "#/$defs/identifier"
+        },
+        "display": {
+          "type": "string"
+        }
+      }
+    },
+    "humanName": {
+      "type": "object",
+      "properties": {
+        "use": {
+          "type": "string",
+          "description": "The purpose of the name"
+        },
+        "text": {
+          "type": "string",
+          "description": "Representation of the full name"
+        },
+        "family": {
+          "type": "string",
+          "description": "Family name or Surname"
+        },
+        "given": {
+          "type": "array",
+          "description": "Given names: first, middle",
+          "items": {
+            "type": "string"
+          }
+        },
+        "prefix": {
+          "type": "array",
+          "description": "Name parts before the name",
+          "items": {
+            "type": "string"
+          }
+        },
+        "suffix": {
+          "type": "array",
+          "description": "Name parts after the name",
+          "items": {
+            "type": "string"
+          }
+        },
+        "period": {
+          "$ref": "#/$defs/period",
+          "description": "Time period when the name was in use. Expected to be a date or partial date"
+        }
+      }
+    },
+    "qualification": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "type": "array",
+          "description": "An identifier for this qualification for the practitioner",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        },
+        "code": {
+          "$ref": "#/$defs/codeableConcept",
+          "description": "Coded representation of the qualification"
+        },
+        "period": {
+          "$ref": "#/$defs/period",
+          "description": "Period during which the qualification is valid"
+        },
+        "issuer": {
+          "$ref": "#/$defs/resourceReference",
+          "description": "Organization that regulates and issues the qualification"
+        }
+      },
+      "required": ["code"]
+    },
+    "practitioner": {
+      "type": "object",
+      "description": "The Practitioner resource",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Resource ID"
+        },
+        "fhirId": {
+          "type": "string",
+          "description": "FHIR ID"
+        },
+        "tenantId": {
+          "type": "string",
+          "description": "The tenant ID"
+        },
+        "resourceVersion": {
+          "type": "string",
+          "description": "An monotonically incrementing version used for ordering representations"
+        },
+        "identifier": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        },
+        "active": {
+          "type": "boolean",
+          "description": "Whether the Practitioner's record is in active use"
+        },
+        "name": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/humanName"
+          },
+          "minItems": 1
+        },
+        "telecom": {
+          "type": "array",
+          "description": "A contact detail for the practitioner (that apply to all roles)",
+          "items": {
+            "$ref": "#/$defs/roninContactPoint"
+          }
+        },
+        "address": {
+          "type": "array",
+          "description": "Address(es) of the practitioner that are not role specific (typically home address)",
+          "items": {
+            "$ref": "#/$defs/address"
+          }
+        },
+        "gender": {
+          "type": "string",
+          "description": "The gender of the Practitioner"
+        },
+        "birthDate": {
+          "type": "string",
+          "description": "The date on which the practitioner was born. This is a FHIR date so it may not be a full birthdate"
+        },
+        "photo": {
+          "type": "array",
+          "description": "Image of the person",
+          "items": {
+            "$ref": "#/$defs/attachment"
+          }
+        },
+        "qualification": {
+          "type": "array",
+          "description": "Certification, licenses, or training pertaining to the provision of care",
+          "items": {
+            "$ref": "#/$defs/qualification"
+          }
+        },
+        "communication": {
+          "type": "array",
+          "description": "A language the practitioner can use in patient communication",
+          "items": {
+            "$ref": "#/$defs/codeableConcept"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When was the Practitioner was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the Practitioner was last updated"
+        }
+      },
+      "required": [
+        "id",
+        "fhirId",
+        "tenantId", 
+        "resourceVersion",
+        "name",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  }
+}
